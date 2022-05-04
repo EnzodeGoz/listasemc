@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct molde
+struct molde 
 {
     int codigo;
     int quantidade;
     float preco;
     struct molde * prox;
-}produto, *ptrproduto;
-
+} *ptrproduto;
+typedef struct molde Mol;
 int n, *ptrn = 0;
 
 int print_menu(){
@@ -17,15 +17,28 @@ int print_menu(){
     printf("1) Inserir itens\n2) Exibir lista de itens\n3) Pesquisar itens\n4) Remover itens\n5) Sair\n>");
     return 0;
 }
-int inseririnicio(){
+Mol* criar(){
+    Mol *novMol = (Mol*)malloc(sizeof(Mol));
+    return novMol;
+}
+Mol* inseririnicio(Mol*ptrproduto){
+    Mol*novomol = criar();
     printf("Insira o código do produto:\n>");
-    scanf("%i",&ptrproduto->codigo);
+    scanf("%i",&novomol->codigo);
     printf("Insira a quantidade do produto:\n>");
-    scanf("%i", &ptrproduto->quantidade);
+    scanf("%i", &novomol->quantidade);
     printf("Insira o preço do produto:\n>");
-    scanf("%i", &ptrproduto->preco);
-
-    return 0;
+    scanf("%i", &novomol->preco);
+    if(ptrproduto == NULL){
+        ptrproduto = novomol;
+        novomol->prox=NULL;
+    }
+    else{
+        novomol->prox=ptrproduto;
+        ptrproduto=novomol;
+    }
+    return ptrproduto;
+    
 }
 
 int inserirmeio(){
@@ -36,8 +49,12 @@ int inserirfim(){
     return 0;
 }
 
-void exibir_lista(){
-    return 0;
+void exibir_lista(Mol* ptrproduto){
+    Mol *printmol = ptrproduto;
+    while(printmol != NULL){
+        printf("\nCódigo: %i\nQuantidade: %i\nPreço: %.2f", printmol->codigo, printmol->quantidade, printmol->preco);
+        printmol = printmol->prox;
+    }
 }
 
 int pesquisar(){
@@ -49,9 +66,8 @@ int remover(){
 }
 
 int main(){
-    ptrproduto = &produto;
-    ptrproduto->prox = NULL;
-    ptrproduto = (struct molde *) malloc(sizeof(produto));
+    ptrproduto = NULL;
+    ptrproduto = (Mol *) malloc(sizeof(Mol));
     printf("Olá! Bem vindo ao programa de Listas Sequenciais.\n");
     for(int menu = 0; menu != 5; menu = menu){
         print_menu();
@@ -64,7 +80,7 @@ int main(){
                 printf("%i", &pos);
                 switch(pos){
                     case 1:
-                        inseririnicio();
+                        inseririnicio(ptrproduto);
                     break;
                     case 2:
                         inserirmeio();
@@ -82,7 +98,7 @@ int main(){
             break;
             case 2:
                 printf("Essa é a atual lista de itens:\n");
-                exibir_lista();
+                exibir_lista(ptrproduto);
             break;
             case 3:
                 pesquisar();
