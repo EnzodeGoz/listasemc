@@ -13,83 +13,128 @@ typedef struct molde Mol;
 int n, *ptrn = 0;
 
 int print_menu(){
-    printf ("Escolha uma das opções do menu abaixo:\n");
+    printf ("\nEscolha uma das opções do menu abaixo:\n");
     printf("1) Inserir itens\n2) Exibir lista de itens\n3) Pesquisar itens\n4) Remover itens\n5) Sair\n>");
     return 0;
 }
-Mol* criar(){
+Mol* criarmol(){
     Mol *novMol = (Mol*)malloc(sizeof(Mol));
     return novMol;
 }
 Mol* inseririnicio(Mol*ptrproduto){
-    Mol*novomol = criar();
+    Mol*novomol = criarmol();
     printf("Insira o código do produto:\n>");
     scanf("%i",&novomol->codigo);
     printf("Insira a quantidade do produto:\n>");
     scanf("%i", &novomol->quantidade);
     printf("Insira o preço do produto:\n>");
-    scanf("%i", &novomol->preco);
+    scanf("%f", &novomol->preco);
     if(ptrproduto == NULL){
         ptrproduto = novomol;
-        novomol->prox=NULL;
+        novomol->prox = NULL;
     }
     else{
-        novomol->prox=ptrproduto;
-        ptrproduto=novomol;
+        novomol->prox = ptrproduto;
+        ptrproduto = novomol;
     }
     return ptrproduto;
     
 }
 
-int inserirmeio(){
-    return 0;
-}
 
-int inserirfim(){
-    return 0;
+Mol* inserirfim(Mol*ptrproduto){
+    Mol*novomol = criarmol();
+    printf("Insira o código do produto:\n>");
+    scanf("%i",&novomol->codigo);
+    printf("Insira a quantidade do produto:\n>");
+    scanf("%i", &novomol->quantidade);
+    printf("Insira o preço do produto:\n>");
+    scanf("%f", &novomol->preco);
+    if(ptrproduto == NULL){
+        novomol->prox = NULL;
+        ptrproduto = novomol;
+    }
+    else{
+        Mol *mau=ptrproduto;
+        while(mau->prox != NULL){
+                mau=mau->prox;
+        }
+        novomol->prox = NULL;
+        mau->prox = novomol;
+    }
+    return ptrproduto;
 }
 
 void exibir_lista(Mol* ptrproduto){
     Mol *printmol = ptrproduto;
-    while(printmol != NULL){
-        printf("\nCódigo: %i\nQuantidade: %i\nPreço: %.2f", printmol->codigo, printmol->quantidade, printmol->preco);
-        printmol = printmol->prox;
+    if (ptrproduto == NULL){
+        printf("A lista está vazia.\n");
+    }
+    else{
+        while(printmol != NULL){
+            printf("\nItem:\nCódigo: %i\nQuantidade: %i\nPreço: R$%.2f\n", printmol->codigo, printmol->quantidade, printmol->preco);
+                printmol = printmol->prox;
+        }
     }
 }
 
-int pesquisar(){
-    return 0;
+void pesquisar(Mol * ptrproduto){
+    int cod;
+    if (ptrproduto == NULL){
+        printf("A lista está vazia.\n");
+    }
+    else{
+        printf("Qual o código do item que deseja pesquisar?\n>");
+        scanf("%i", &cod);
+        Mol *pesquisamol = ptrproduto;
+            while(pesquisamol != NULL){
+                if(pesquisamol->codigo == cod){
+                    printf("\nItem:\nCódigo: %i\nQuantidade: %i\nPreço: R$%.2f\n", pesquisamol->codigo,pesquisamol->quantidade,pesquisamol->preco);
+                }
+                pesquisamol = pesquisamol->prox;
+            }
+    }
 }
 
-int remover(){
-    return 0;
+Mol * removerinicio(Mol * ptrproduto){
+    free(ptrproduto);
+    ptrproduto = ptrproduto->prox;
+    return ptrproduto;
+}
+
+Mol * removerfim(Mol * ptrproduto){
+    Mol * antemol = ptrproduto;
+    Mol * atuamol = ptrproduto->prox;
+    while(atuamol->prox != NULL){
+        antemol = atuamol;
+        atuamol = atuamol->prox;
+    }
+    antemol->prox = NULL;
+    free(atuamol);
+    return antemol;
 }
 
 int main(){
     ptrproduto = NULL;
-    ptrproduto = (Mol *) malloc(sizeof(Mol));
+    int pos, poos;
     printf("Olá! Bem vindo ao programa de Listas Sequenciais.\n");
     for(int menu = 0; menu != 5; menu = menu){
         print_menu();
         scanf("%i", &menu);
         switch(menu){
             case 1:
-            int pos;
                 printf("Deseja inserir um elemento em que posição da lista?\n");
-                printf("1) Inicio\n2) Meio\n3) Final\n4) Sair\n>");
-                printf("%i", &pos);
+                printf("1) Inicio\n2) Final\n3) Sair\n>");
+                scanf("%i", &pos);
                 switch(pos){
                     case 1:
-                        inseririnicio(ptrproduto);
+                        ptrproduto = inseririnicio(ptrproduto);
                     break;
                     case 2:
-                        inserirmeio();
+                        ptrproduto = inserirfim(ptrproduto);
                     break;
                     case 3:
-                        inserirfim();
-                    break;
-                    case 4:
-                    PRINTF("Sair foi escolhido.\n");
+                        printf("Sair foi escolhido.\n");
                     break;
                     default:
                     printf("Comando inválido. Insira um escolha válida.\n");
@@ -101,10 +146,30 @@ int main(){
                 exibir_lista(ptrproduto);
             break;
             case 3:
-                pesquisar();
+                pesquisar(ptrproduto);
             break;
-            case 4:               
-                remover();
+            case 4:
+                if (ptrproduto == NULL){
+                    printf("A lista está vazia.\n");
+                }
+                else{
+                printf("Deseja remover o elemento de que posição da lista?\n");
+                printf("1) Inicio\n2) Fim\n3) Sair\n>");
+                scanf("%i", &poos);
+                switch(poos){
+                    case 1:
+                        ptrproduto = removerinicio(ptrproduto);
+                    break;
+                    case 2:
+                        ptrproduto = removerfim(ptrproduto);
+                    break;
+                    case 3:
+                        printf("Sair foi escolhido.\n");
+                    break;
+                    default:
+                        printf("Comando inválido. Insira uma escolha válida.\n");
+                }
+                }
             break;
             case 5:
                 printf("Sair for escolhido.");
