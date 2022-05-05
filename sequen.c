@@ -143,7 +143,8 @@ int main(){
     ptrn = 0;
     ptrproduto = &produto;
     ptrproduto = (struct molde *) calloc(5, sizeof(struct molde));
-    printf("Olá! Bem vindo ao programa de Listas Sequenciais.\n");
+    printf("Programa desenvolvido por Enzo de Góz Pereira.\n");
+    printf("Olá! Bem-vindo ao programa de Listas Sequenciais.\n");
     for(int menu = 0; menu != 5; menu = menu){
         print_menu();
         scanf("%i", &menu);

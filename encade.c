@@ -117,7 +117,8 @@ Mol * removerfim(Mol * ptrproduto){
 int main(){
     ptrproduto = NULL;
     int pos, poos;
-    printf("Olá! Bem vindo ao programa de Listas Sequenciais.\n");
+    printf("Programa desenvolvido por Enzo de Góz Pereira.\n");
+    printf("Olá! Bem-vindo ao programa de Listas Sequenciais.\n");
     for(int menu = 0; menu != 5; menu = menu){
         print_menu();
         scanf("%i", &menu);
