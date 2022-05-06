@@ -29,7 +29,7 @@ int inserir(){
         printf("A lista deve ter no máximo 5 itens.\n\n");
         return 0;
         }
-        else if ((int)ptrn < 5){
+        else if ((int)ptrn <= 5){
         for (int i = 0; i<(int)ptrn; i++){
         printf("Código do item %i:\n>", i);
         scanf("%i",&(ptrproduto + i)->codigo);
